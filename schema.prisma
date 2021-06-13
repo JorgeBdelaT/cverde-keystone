@@ -41,10 +41,60 @@ model AllianceSocialNetwork {
 }
 
 model SocialNetwork {
-  id                                       Int                     @id @default(autoincrement())
-  logoUrl                                  String?
-  name                                     String?
-  from_AllianceSocialNetwork_socialNetwork AllianceSocialNetwork[] @relation("AllianceSocialNetworksocialNetwork")
+  id                                           Int                         @id @default(autoincrement())
+  logoUrl                                      String?
+  name                                         String?
+  from_AllianceSocialNetwork_socialNetwork     AllianceSocialNetwork[]     @relation("AllianceSocialNetworksocialNetwork")
+  from_CoordinationSocialNetwork_socialNetwork CoordinationSocialNetwork[] @relation("CoordinationSocialNetworksocialNetwork")
+}
+
+model Coordination {
+  id               Int                        @id @default(autoincrement())
+  createdAt        DateTime?
+  description      String?
+  logoUrl          String?
+  name             String?
+  organizationName String?
+  members          CoordinationUserPosition[] @relation("CoordinationUserPositioncoordination")
+  socialNetworks   CoordinationSocialNetwork? @relation("CoordinationsocialNetworks", fields: [socialNetworksId], references: [id])
+  socialNetworksId Int?                       @map("socialNetworks")
+
+  @@index([socialNetworksId])
+}
+
+model CoordinationSocialNetwork {
+  id                               Int            @id @default(autoincrement())
+  link                             String?
+  socialNetwork                    SocialNetwork? @relation("CoordinationSocialNetworksocialNetwork", fields: [socialNetworkId], references: [id])
+  socialNetworkId                  Int?           @map("socialNetwork")
+  from_Coordination_socialNetworks Coordination[] @relation("CoordinationsocialNetworks")
+
+  @@index([socialNetworkId])
+}
+
+model CoordinationUserPosition {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime?
+  endDate        DateTime?
+  startDate      DateTime?
+  coordination   Coordination? @relation("CoordinationUserPositioncoordination", fields: [coordinationId], references: [id])
+  coordinationId Int?          @map("coordination")
+  position       Position?     @relation("CoordinationUserPositionposition", fields: [positionId], references: [id])
+  positionId     Int?          @map("position")
+  user           User?         @relation("CoordinationUserPositionuser", fields: [userId], references: [id])
+  userId         Int?          @map("user")
+
+  @@index([coordinationId])
+  @@index([positionId])
+  @@index([userId])
+}
+
+model Position {
+  id                                     Int                        @id @default(autoincrement())
+  createdAt                              DateTime?
+  description                            String?
+  name                                   String?
+  from_CoordinationUserPosition_position CoordinationUserPosition[] @relation("CoordinationUserPositionposition")
 }
 
 model Post {
@@ -67,11 +117,12 @@ model Tag {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String?    @unique
-  isAdmin   Boolean?
-  name      String?
-  password  String?
-  alliances Alliance[] @relation("AllianceinChargeUser")
-  posts     Post[]     @relation("Postauthor")
+  id                                 Int                        @id @default(autoincrement())
+  email                              String?                    @unique
+  isAdmin                            Boolean?
+  name                               String?
+  password                           String?
+  alliances                          Alliance[]                 @relation("AllianceinChargeUser")
+  posts                              Post[]                     @relation("Postauthor")
+  from_CoordinationUserPosition_user CoordinationUserPosition[] @relation("CoordinationUserPositionuser")
 }

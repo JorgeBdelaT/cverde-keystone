@@ -202,7 +202,7 @@ input SocialNetworkRelateToOneInput {
 }
 
 """
- Redes sociales de una alianza
+ A keystone list
 """
 type AllianceSocialNetwork {
   id: ID!
@@ -372,6 +372,528 @@ input SocialNetworkCreateInput {
 
 input SocialNetworksCreateInput {
   data: SocialNetworkCreateInput
+}
+
+input CoordinationUserPositionRelateToManyInput {
+  create: [CoordinationUserPositionCreateInput]
+  connect: [CoordinationUserPositionWhereUniqueInput]
+  disconnect: [CoordinationUserPositionWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
+input CoordinationSocialNetworkRelateToOneInput {
+  create: CoordinationSocialNetworkCreateInput
+  connect: CoordinationSocialNetworkWhereUniqueInput
+  disconnect: CoordinationSocialNetworkWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+"""
+ A keystone list
+"""
+type Coordination {
+  id: ID!
+  createdAt: String
+  description: String
+  logoUrl: String
+  members(
+    where: CoordinationUserPositionWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationUserPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationUserPositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [CoordinationUserPosition!]!
+  _membersMeta(
+    where: CoordinationUserPositionWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationUserPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationUserPositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use membersCount instead."
+    )
+  membersCount(where: CoordinationUserPositionWhereInput! = {}): Int
+  name: String
+  organizationName: String
+  socialNetworks: CoordinationSocialNetwork
+}
+
+input CoordinationWhereInput {
+  AND: [CoordinationWhereInput!]
+  OR: [CoordinationWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  createdAt: String
+  createdAt_not: String
+  createdAt_lt: String
+  createdAt_lte: String
+  createdAt_gt: String
+  createdAt_gte: String
+  createdAt_in: [String]
+  createdAt_not_in: [String]
+  description: String
+  description_not: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  description_i: String
+  description_not_i: String
+  description_contains_i: String
+  description_not_contains_i: String
+  description_starts_with_i: String
+  description_not_starts_with_i: String
+  description_ends_with_i: String
+  description_not_ends_with_i: String
+  description_in: [String]
+  description_not_in: [String]
+  logoUrl: String
+  logoUrl_not: String
+  logoUrl_contains: String
+  logoUrl_not_contains: String
+  logoUrl_starts_with: String
+  logoUrl_not_starts_with: String
+  logoUrl_ends_with: String
+  logoUrl_not_ends_with: String
+  logoUrl_i: String
+  logoUrl_not_i: String
+  logoUrl_contains_i: String
+  logoUrl_not_contains_i: String
+  logoUrl_starts_with_i: String
+  logoUrl_not_starts_with_i: String
+  logoUrl_ends_with_i: String
+  logoUrl_not_ends_with_i: String
+  logoUrl_in: [String]
+  logoUrl_not_in: [String]
+
+  """
+   condition must be true for all nodes
+  """
+  members_every: CoordinationUserPositionWhereInput
+
+  """
+   condition must be true for at least 1 node
+  """
+  members_some: CoordinationUserPositionWhereInput
+
+  """
+   condition must be false for all nodes
+  """
+  members_none: CoordinationUserPositionWhereInput
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  organizationName: String
+  organizationName_not: String
+  organizationName_contains: String
+  organizationName_not_contains: String
+  organizationName_starts_with: String
+  organizationName_not_starts_with: String
+  organizationName_ends_with: String
+  organizationName_not_ends_with: String
+  organizationName_i: String
+  organizationName_not_i: String
+  organizationName_contains_i: String
+  organizationName_not_contains_i: String
+  organizationName_starts_with_i: String
+  organizationName_not_starts_with_i: String
+  organizationName_ends_with_i: String
+  organizationName_not_ends_with_i: String
+  organizationName_in: [String]
+  organizationName_not_in: [String]
+  socialNetworks: CoordinationSocialNetworkWhereInput
+  socialNetworks_is_null: Boolean
+}
+
+input CoordinationWhereUniqueInput {
+  id: ID!
+}
+
+enum SortCoordinationsBy {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  logoUrl_ASC
+  logoUrl_DESC
+  name_ASC
+  name_DESC
+  organizationName_ASC
+  organizationName_DESC
+}
+
+input CoordinationOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  description: OrderDirection
+  logoUrl: OrderDirection
+  name: OrderDirection
+  organizationName: OrderDirection
+}
+
+input CoordinationUpdateInput {
+  createdAt: String
+  description: String
+  logoUrl: String
+  members: CoordinationUserPositionRelateToManyInput
+  name: String
+  organizationName: String
+  socialNetworks: CoordinationSocialNetworkRelateToOneInput
+}
+
+input CoordinationsUpdateInput {
+  id: ID!
+  data: CoordinationUpdateInput
+}
+
+input CoordinationCreateInput {
+  createdAt: String
+  description: String
+  logoUrl: String
+  members: CoordinationUserPositionRelateToManyInput
+  name: String
+  organizationName: String
+  socialNetworks: CoordinationSocialNetworkRelateToOneInput
+}
+
+input CoordinationsCreateInput {
+  data: CoordinationCreateInput
+}
+
+"""
+ A keystone list
+"""
+type CoordinationSocialNetwork {
+  id: ID!
+  link: String
+  socialNetwork: SocialNetwork
+}
+
+input CoordinationSocialNetworkWhereInput {
+  AND: [CoordinationSocialNetworkWhereInput!]
+  OR: [CoordinationSocialNetworkWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  link: String
+  link_not: String
+  link_contains: String
+  link_not_contains: String
+  link_starts_with: String
+  link_not_starts_with: String
+  link_ends_with: String
+  link_not_ends_with: String
+  link_i: String
+  link_not_i: String
+  link_contains_i: String
+  link_not_contains_i: String
+  link_starts_with_i: String
+  link_not_starts_with_i: String
+  link_ends_with_i: String
+  link_not_ends_with_i: String
+  link_in: [String]
+  link_not_in: [String]
+  socialNetwork: SocialNetworkWhereInput
+  socialNetwork_is_null: Boolean
+}
+
+input CoordinationSocialNetworkWhereUniqueInput {
+  id: ID!
+}
+
+enum SortCoordinationSocialNetworksBy {
+  id_ASC
+  id_DESC
+  link_ASC
+  link_DESC
+}
+
+input CoordinationSocialNetworkOrderByInput {
+  id: OrderDirection
+  link: OrderDirection
+}
+
+input CoordinationSocialNetworkUpdateInput {
+  link: String
+  socialNetwork: SocialNetworkRelateToOneInput
+}
+
+input CoordinationSocialNetworksUpdateInput {
+  id: ID!
+  data: CoordinationSocialNetworkUpdateInput
+}
+
+input CoordinationSocialNetworkCreateInput {
+  link: String
+  socialNetwork: SocialNetworkRelateToOneInput
+}
+
+input CoordinationSocialNetworksCreateInput {
+  data: CoordinationSocialNetworkCreateInput
+}
+
+input CoordinationRelateToOneInput {
+  create: CoordinationCreateInput
+  connect: CoordinationWhereUniqueInput
+  disconnect: CoordinationWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+input PositionRelateToOneInput {
+  create: PositionCreateInput
+  connect: PositionWhereUniqueInput
+  disconnect: PositionWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+"""
+ A keystone list
+"""
+type CoordinationUserPosition {
+  id: ID!
+  createdAt: String
+  endDate: String
+  startDate: String
+  coordination: Coordination
+  position: Position
+  user: User
+}
+
+input CoordinationUserPositionWhereInput {
+  AND: [CoordinationUserPositionWhereInput!]
+  OR: [CoordinationUserPositionWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  createdAt: String
+  createdAt_not: String
+  createdAt_lt: String
+  createdAt_lte: String
+  createdAt_gt: String
+  createdAt_gte: String
+  createdAt_in: [String]
+  createdAt_not_in: [String]
+  endDate: String
+  endDate_not: String
+  endDate_lt: String
+  endDate_lte: String
+  endDate_gt: String
+  endDate_gte: String
+  endDate_in: [String]
+  endDate_not_in: [String]
+  startDate: String
+  startDate_not: String
+  startDate_lt: String
+  startDate_lte: String
+  startDate_gt: String
+  startDate_gte: String
+  startDate_in: [String]
+  startDate_not_in: [String]
+  coordination: CoordinationWhereInput
+  coordination_is_null: Boolean
+  position: PositionWhereInput
+  position_is_null: Boolean
+  user: UserWhereInput
+  user_is_null: Boolean
+}
+
+input CoordinationUserPositionWhereUniqueInput {
+  id: ID!
+}
+
+enum SortCoordinationUserPositionsBy {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  endDate_ASC
+  endDate_DESC
+  startDate_ASC
+  startDate_DESC
+}
+
+input CoordinationUserPositionOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  endDate: OrderDirection
+  startDate: OrderDirection
+}
+
+input CoordinationUserPositionUpdateInput {
+  createdAt: String
+  endDate: String
+  startDate: String
+  coordination: CoordinationRelateToOneInput
+  position: PositionRelateToOneInput
+  user: UserRelateToOneInput
+}
+
+input CoordinationUserPositionsUpdateInput {
+  id: ID!
+  data: CoordinationUserPositionUpdateInput
+}
+
+input CoordinationUserPositionCreateInput {
+  createdAt: String
+  endDate: String
+  startDate: String
+  coordination: CoordinationRelateToOneInput
+  position: PositionRelateToOneInput
+  user: UserRelateToOneInput
+}
+
+input CoordinationUserPositionsCreateInput {
+  data: CoordinationUserPositionCreateInput
+}
+
+"""
+ A keystone list
+"""
+type Position {
+  id: ID!
+  createdAt: String
+  description: String
+  name: String
+}
+
+input PositionWhereInput {
+  AND: [PositionWhereInput!]
+  OR: [PositionWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  createdAt: String
+  createdAt_not: String
+  createdAt_lt: String
+  createdAt_lte: String
+  createdAt_gt: String
+  createdAt_gte: String
+  createdAt_in: [String]
+  createdAt_not_in: [String]
+  description: String
+  description_not: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  description_i: String
+  description_not_i: String
+  description_contains_i: String
+  description_not_contains_i: String
+  description_starts_with_i: String
+  description_not_starts_with_i: String
+  description_ends_with_i: String
+  description_not_ends_with_i: String
+  description_in: [String]
+  description_not_in: [String]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+}
+
+input PositionWhereUniqueInput {
+  id: ID!
+}
+
+enum SortPositionsBy {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  name_ASC
+  name_DESC
+}
+
+input PositionOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  description: OrderDirection
+  name: OrderDirection
+}
+
+input PositionUpdateInput {
+  createdAt: String
+  description: String
+  name: String
+}
+
+input PositionsUpdateInput {
+  id: ID!
+  data: PositionUpdateInput
+}
+
+input PositionCreateInput {
+  createdAt: String
+  description: String
+  name: String
+}
+
+input PositionsCreateInput {
+  data: PositionCreateInput
 }
 
 type Post_content_DocumentField {
@@ -952,6 +1474,144 @@ type Mutation {
   deleteSocialNetworks(ids: [ID!]): [SocialNetwork]
 
   """
+   Create a single Coordination item.
+  """
+  createCoordination(data: CoordinationCreateInput): Coordination
+
+  """
+   Create multiple Coordination items.
+  """
+  createCoordinations(data: [CoordinationsCreateInput]): [Coordination]
+
+  """
+   Update a single Coordination item by ID.
+  """
+  updateCoordination(id: ID!, data: CoordinationUpdateInput): Coordination
+
+  """
+   Update multiple Coordination items by ID.
+  """
+  updateCoordinations(data: [CoordinationsUpdateInput]): [Coordination]
+
+  """
+   Delete a single Coordination item by ID.
+  """
+  deleteCoordination(id: ID!): Coordination
+
+  """
+   Delete multiple Coordination items by ID.
+  """
+  deleteCoordinations(ids: [ID!]): [Coordination]
+
+  """
+   Create a single CoordinationSocialNetwork item.
+  """
+  createCoordinationSocialNetwork(
+    data: CoordinationSocialNetworkCreateInput
+  ): CoordinationSocialNetwork
+
+  """
+   Create multiple CoordinationSocialNetwork items.
+  """
+  createCoordinationSocialNetworks(
+    data: [CoordinationSocialNetworksCreateInput]
+  ): [CoordinationSocialNetwork]
+
+  """
+   Update a single CoordinationSocialNetwork item by ID.
+  """
+  updateCoordinationSocialNetwork(
+    id: ID!
+    data: CoordinationSocialNetworkUpdateInput
+  ): CoordinationSocialNetwork
+
+  """
+   Update multiple CoordinationSocialNetwork items by ID.
+  """
+  updateCoordinationSocialNetworks(
+    data: [CoordinationSocialNetworksUpdateInput]
+  ): [CoordinationSocialNetwork]
+
+  """
+   Delete a single CoordinationSocialNetwork item by ID.
+  """
+  deleteCoordinationSocialNetwork(id: ID!): CoordinationSocialNetwork
+
+  """
+   Delete multiple CoordinationSocialNetwork items by ID.
+  """
+  deleteCoordinationSocialNetworks(ids: [ID!]): [CoordinationSocialNetwork]
+
+  """
+   Create a single CoordinationUserPosition item.
+  """
+  createCoordinationUserPosition(
+    data: CoordinationUserPositionCreateInput
+  ): CoordinationUserPosition
+
+  """
+   Create multiple CoordinationUserPosition items.
+  """
+  createCoordinationUserPositions(
+    data: [CoordinationUserPositionsCreateInput]
+  ): [CoordinationUserPosition]
+
+  """
+   Update a single CoordinationUserPosition item by ID.
+  """
+  updateCoordinationUserPosition(
+    id: ID!
+    data: CoordinationUserPositionUpdateInput
+  ): CoordinationUserPosition
+
+  """
+   Update multiple CoordinationUserPosition items by ID.
+  """
+  updateCoordinationUserPositions(
+    data: [CoordinationUserPositionsUpdateInput]
+  ): [CoordinationUserPosition]
+
+  """
+   Delete a single CoordinationUserPosition item by ID.
+  """
+  deleteCoordinationUserPosition(id: ID!): CoordinationUserPosition
+
+  """
+   Delete multiple CoordinationUserPosition items by ID.
+  """
+  deleteCoordinationUserPositions(ids: [ID!]): [CoordinationUserPosition]
+
+  """
+   Create a single Position item.
+  """
+  createPosition(data: PositionCreateInput): Position
+
+  """
+   Create multiple Position items.
+  """
+  createPositions(data: [PositionsCreateInput]): [Position]
+
+  """
+   Update a single Position item by ID.
+  """
+  updatePosition(id: ID!, data: PositionUpdateInput): Position
+
+  """
+   Update multiple Position items by ID.
+  """
+  updatePositions(data: [PositionsUpdateInput]): [Position]
+
+  """
+   Delete a single Position item by ID.
+  """
+  deletePosition(id: ID!): Position
+
+  """
+   Delete multiple Position items by ID.
+  """
+  deletePositions(ids: [ID!]): [Position]
+
+  """
    Create a single Post item.
   """
   createPost(data: PostCreateInput): Post
@@ -1193,6 +1853,154 @@ type Query {
       reason: "This query will be removed in a future version. Please use socialNetworksCount instead."
     )
   socialNetworksCount(where: SocialNetworkWhereInput! = {}): Int
+
+  """
+   Search for all Coordination items which match the where clause.
+  """
+  allCoordinations(
+    where: CoordinationWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Coordination!]
+
+  """
+   Search for the Coordination item with the matching ID.
+  """
+  Coordination(where: CoordinationWhereUniqueInput!): Coordination
+
+  """
+   Perform a meta-query on all Coordination items which match the where clause.
+  """
+  _allCoordinationsMeta(
+    where: CoordinationWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use coordinationsCount instead."
+    )
+  coordinationsCount(where: CoordinationWhereInput! = {}): Int
+
+  """
+   Search for all CoordinationSocialNetwork items which match the where clause.
+  """
+  allCoordinationSocialNetworks(
+    where: CoordinationSocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationSocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [CoordinationSocialNetwork!]
+
+  """
+   Search for the CoordinationSocialNetwork item with the matching ID.
+  """
+  CoordinationSocialNetwork(
+    where: CoordinationSocialNetworkWhereUniqueInput!
+  ): CoordinationSocialNetwork
+
+  """
+   Perform a meta-query on all CoordinationSocialNetwork items which match the where clause.
+  """
+  _allCoordinationSocialNetworksMeta(
+    where: CoordinationSocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationSocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use coordinationSocialNetworksCount instead."
+    )
+  coordinationSocialNetworksCount(
+    where: CoordinationSocialNetworkWhereInput! = {}
+  ): Int
+
+  """
+   Search for all CoordinationUserPosition items which match the where clause.
+  """
+  allCoordinationUserPositions(
+    where: CoordinationUserPositionWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationUserPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationUserPositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [CoordinationUserPosition!]
+
+  """
+   Search for the CoordinationUserPosition item with the matching ID.
+  """
+  CoordinationUserPosition(
+    where: CoordinationUserPositionWhereUniqueInput!
+  ): CoordinationUserPosition
+
+  """
+   Perform a meta-query on all CoordinationUserPosition items which match the where clause.
+  """
+  _allCoordinationUserPositionsMeta(
+    where: CoordinationUserPositionWhereInput! = {}
+    search: String
+    sortBy: [SortCoordinationUserPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [CoordinationUserPositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use coordinationUserPositionsCount instead."
+    )
+  coordinationUserPositionsCount(
+    where: CoordinationUserPositionWhereInput! = {}
+  ): Int
+
+  """
+   Search for all Position items which match the where clause.
+  """
+  allPositions(
+    where: PositionWhereInput! = {}
+    search: String
+    sortBy: [SortPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Position!]
+
+  """
+   Search for the Position item with the matching ID.
+  """
+  Position(where: PositionWhereUniqueInput!): Position
+
+  """
+   Perform a meta-query on all Position items which match the where clause.
+  """
+  _allPositionsMeta(
+    where: PositionWhereInput! = {}
+    search: String
+    sortBy: [SortPositionsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PositionOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use positionsCount instead."
+    )
+  positionsCount(where: PositionWhereInput! = {}): Int
 
   """
    Search for all Post items which match the where clause.
