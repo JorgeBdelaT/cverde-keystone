@@ -9,35 +9,38 @@ generator client {
 }
 
 model Alliance {
-  id               Int                    @id @default(autoincrement())
-  createdAt        DateTime?
-  name             String?
-  description      String?
-  endDate          DateTime?
-  isActive         Boolean?
-  logo_filesize    Int?
-  logo_extension   String?
-  logo_width       Int?
-  logo_height      Int?
-  logo_mode        String?
-  logo_id          String?
-  inChargeUser     User?                  @relation("AllianceinChargeUser", fields: [inChargeUserId], references: [id])
-  inChargeUserId   Int?                   @map("inChargeUser")
-  socialNetworks   AllianceSocialNetwork? @relation("AlliancesocialNetworks", fields: [socialNetworksId], references: [id])
-  socialNetworksId Int?                   @map("socialNetworks")
+  id                                  Int                     @id @default(autoincrement())
+  createdAt                           DateTime?
+  name                                String?
+  description                         String?
+  endDate                             DateTime?
+  isActive                            Boolean?
+  logo_filesize                       Int?
+  logo_extension                      String?
+  logo_width                          Int?
+  logo_height                         Int?
+  logo_mode                           String?
+  logo_id                             String?
+  inChargeUser                        User?                   @relation("AllianceinChargeUser", fields: [inChargeUserId], references: [id])
+  inChargeUserId                      Int?                    @map("inChargeUser")
+  socialNetworks                      AllianceSocialNetwork[] @relation("Alliance_socialNetworks_many", references: [id])
+  from_AllianceSocialNetwork_alliance AllianceSocialNetwork[] @relation("AllianceSocialNetworkalliance")
 
   @@index([inChargeUserId])
-  @@index([socialNetworksId])
 }
 
 model AllianceSocialNetwork {
   id                           Int            @id @default(autoincrement())
   link                         String?
+  name                         String?
   socialNetwork                SocialNetwork? @relation("AllianceSocialNetworksocialNetwork", fields: [socialNetworkId], references: [id])
   socialNetworkId              Int?           @map("socialNetwork")
-  from_Alliance_socialNetworks Alliance[]     @relation("AlliancesocialNetworks")
+  alliance                     Alliance?      @relation("AllianceSocialNetworkalliance", fields: [allianceId], references: [id])
+  allianceId                   Int?           @map("alliance")
+  from_Alliance_socialNetworks Alliance[]     @relation("Alliance_socialNetworks_many", references: [id])
 
   @@index([socialNetworkId])
+  @@index([allianceId])
 }
 
 model SocialNetwork {
@@ -49,17 +52,14 @@ model SocialNetwork {
 }
 
 model Coordination {
-  id               Int                        @id @default(autoincrement())
+  id               Int                         @id @default(autoincrement())
   createdAt        DateTime?
   description      String?
   logoUrl          String?
   name             String?
   organizationName String?
-  members          CoordinationUserPosition[] @relation("CoordinationUserPositioncoordination")
-  socialNetworks   CoordinationSocialNetwork? @relation("CoordinationsocialNetworks", fields: [socialNetworksId], references: [id])
-  socialNetworksId Int?                       @map("socialNetworks")
-
-  @@index([socialNetworksId])
+  members          CoordinationUserPosition[]  @relation("CoordinationUserPositioncoordination")
+  socialNetworks   CoordinationSocialNetwork[] @relation("Coordination_socialNetworks_many", references: [id])
 }
 
 model CoordinationSocialNetwork {
@@ -67,7 +67,7 @@ model CoordinationSocialNetwork {
   link                             String?
   socialNetwork                    SocialNetwork? @relation("CoordinationSocialNetworksocialNetwork", fields: [socialNetworkId], references: [id])
   socialNetworkId                  Int?           @map("socialNetwork")
-  from_Coordination_socialNetworks Coordination[] @relation("CoordinationsocialNetworks")
+  from_Coordination_socialNetworks Coordination[] @relation("Coordination_socialNetworks_many", references: [id])
 
   @@index([socialNetworkId])
 }

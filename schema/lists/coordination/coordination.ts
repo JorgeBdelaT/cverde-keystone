@@ -20,6 +20,7 @@ export const Coordination = list({
     organizationName: text({ isRequired: true }),
     socialNetworks: relationship({
       ref: "CoordinationSocialNetwork",
+      many: true,
     }),
   },
 });

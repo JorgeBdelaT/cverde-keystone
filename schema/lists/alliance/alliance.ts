@@ -23,6 +23,17 @@ export const Alliance = list({
     createdAt: timestamp({
       isRequired: true,
       defaultValue: new Date().toISOString(),
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+        itemView: {
+          fieldMode: "hidden",
+        },
+        listView: {
+          fieldMode: "hidden",
+        },
+      },
     }),
     name: text({ isRequired: true }),
     description: text({ isRequired: true }),
@@ -32,6 +43,7 @@ export const Alliance = list({
     logo: image(),
     socialNetworks: relationship({
       ref: "AllianceSocialNetwork",
+      many: true,
     }),
   },
 });
