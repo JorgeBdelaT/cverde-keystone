@@ -13,7 +13,7 @@ const users = [
     data: {
       name: "seba",
       email: "seba@cverde.org",
-      isAdmin: true,
+      isAdmin: false,
       password: "12345678",
     },
   },

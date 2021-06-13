@@ -1,17 +1,12 @@
 import { list } from "@keystone-next/keystone/schema";
 import { text, relationship } from "@keystone-next/fields";
+import { isAdmin } from "../../../utils/auth";
 
 export const AllianceSocialNetwork = list({
   ui: { isHidden: true },
   fields: {
     link: text(),
-    name: text({
-      ui: {
-        createView: {
-          fieldMode: "hidden",
-        },
-      },
-    }),
+    name: text(),
     socialNetwork: relationship({ ref: "SocialNetwork" }),
     alliance: relationship({ ref: "Alliance" }),
   },
@@ -27,6 +22,11 @@ export const AllianceSocialNetwork = list({
         };
       }
       return resolvedData;
+    },
+  },
+  access: {
+    create: ({ context }) => {
+      return isAdmin(context);
     },
   },
 });

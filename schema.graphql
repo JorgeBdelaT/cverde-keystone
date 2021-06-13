@@ -1499,16 +1499,6 @@ type Mutation {
   updateAlliances(data: [AlliancesUpdateInput]): [Alliance]
 
   """
-   Delete a single Alliance item by ID.
-  """
-  deleteAlliance(id: ID!): Alliance
-
-  """
-   Delete multiple Alliance items by ID.
-  """
-  deleteAlliances(ids: [ID!]): [Alliance]
-
-  """
    Create a single AllianceSocialNetwork item.
   """
   createAllianceSocialNetwork(

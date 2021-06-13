@@ -4,7 +4,7 @@ import { statelessSessions } from "@keystone-next/keystone/session";
 import { createAuth } from "@keystone-next/auth";
 
 import { lists } from "./schema";
-import { isAdmin } from "./utils/auth";
+import { isLoggedIn } from "./utils/auth";
 import { runSeeds } from "./seeds";
 
 loadEnvs();
@@ -54,7 +54,7 @@ export default withAuth(
       onConnect: ({ db }) => runSeeds(db),
     },
     ui: {
-      isAccessAllowed: (context) => isAdmin(context),
+      isAccessAllowed: (context) => isLoggedIn(context),
     },
     lists,
     session,
