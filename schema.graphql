@@ -1,46 +1,67 @@
-input PostRelateToManyInput {
-  create: [PostCreateInput]
-  connect: [PostWhereUniqueInput]
-  disconnect: [PostWhereUniqueInput]
+input UserRelateToOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: UserWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+input ImageFieldInput {
+  upload: Upload
+  ref: String
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
+}
+
+interface ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  ref: String!
+  src: String!
+}
+
+type LocalImageFieldOutput implements ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  ref: String!
+  src: String!
+}
+
+input AllianceSocialNetworkRelateToOneInput {
+  create: AllianceSocialNetworkCreateInput
+  connect: AllianceSocialNetworkWhereUniqueInput
+  disconnect: AllianceSocialNetworkWhereUniqueInput
   disconnectAll: Boolean
 }
 
 """
  A keystone list
 """
-type User {
+type Alliance {
   id: ID!
+  createdAt: String
   name: String
-  email: String
-  password_is_set: Boolean
-  isAdmin: Boolean
-  posts(
-    where: PostWhereInput! = {}
-    search: String
-    sortBy: [SortPostsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [PostOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): [Post!]!
-  _postsMeta(
-    where: PostWhereInput! = {}
-    search: String
-    sortBy: [SortPostsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [PostOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): _QueryMeta
-    @deprecated(
-      reason: "This query will be removed in a future version. Please use postsCount instead."
-    )
-  postsCount(where: PostWhereInput! = {}): Int
+  description: String
+  endDate: String
+  inChargeUser: User
+  isActive: Boolean
+  logo: ImageFieldOutput
+  socialNetworks: AllianceSocialNetwork
 }
 
-input UserWhereInput {
-  AND: [UserWhereInput!]
-  OR: [UserWhereInput!]
+input AllianceWhereInput {
+  AND: [AllianceWhereInput!]
+  OR: [AllianceWhereInput!]
   id: ID
   id_not: ID
   id_lt: ID
@@ -49,6 +70,14 @@ input UserWhereInput {
   id_gte: ID
   id_in: [ID]
   id_not_in: [ID]
+  createdAt: String
+  createdAt_not: String
+  createdAt_lt: String
+  createdAt_lte: String
+  createdAt_gt: String
+  createdAt_gte: String
+  createdAt_in: [String]
+  createdAt_not_in: [String]
   name: String
   name_not: String
   name_contains: String
@@ -67,64 +96,66 @@ input UserWhereInput {
   name_not_ends_with_i: String
   name_in: [String]
   name_not_in: [String]
-  email: String
-  email_not: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
-  email_i: String
-  email_not_i: String
-  email_contains_i: String
-  email_not_contains_i: String
-  email_starts_with_i: String
-  email_not_starts_with_i: String
-  email_ends_with_i: String
-  email_not_ends_with_i: String
-  email_in: [String]
-  email_not_in: [String]
-  password_is_set: Boolean
-  isAdmin: Boolean
-  isAdmin_not: Boolean
-
-  """
-   condition must be true for all nodes
-  """
-  posts_every: PostWhereInput
-
-  """
-   condition must be true for at least 1 node
-  """
-  posts_some: PostWhereInput
-
-  """
-   condition must be false for all nodes
-  """
-  posts_none: PostWhereInput
+  description: String
+  description_not: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  description_i: String
+  description_not_i: String
+  description_contains_i: String
+  description_not_contains_i: String
+  description_starts_with_i: String
+  description_not_starts_with_i: String
+  description_ends_with_i: String
+  description_not_ends_with_i: String
+  description_in: [String]
+  description_not_in: [String]
+  endDate: String
+  endDate_not: String
+  endDate_lt: String
+  endDate_lte: String
+  endDate_gt: String
+  endDate_gte: String
+  endDate_in: [String]
+  endDate_not_in: [String]
+  inChargeUser: UserWhereInput
+  inChargeUser_is_null: Boolean
+  isActive: Boolean
+  isActive_not: Boolean
+  socialNetworks: AllianceSocialNetworkWhereInput
+  socialNetworks_is_null: Boolean
 }
 
-input UserWhereUniqueInput {
+input AllianceWhereUniqueInput {
   id: ID!
 }
 
-enum SortUsersBy {
+enum SortAlliancesBy {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
   name_ASC
   name_DESC
-  email_ASC
-  email_DESC
-  isAdmin_ASC
-  isAdmin_DESC
+  description_ASC
+  description_DESC
+  endDate_ASC
+  endDate_DESC
+  isActive_ASC
+  isActive_DESC
 }
 
-input UserOrderByInput {
+input AllianceOrderByInput {
   id: OrderDirection
+  createdAt: OrderDirection
   name: OrderDirection
-  email: OrderDirection
-  isAdmin: OrderDirection
+  description: OrderDirection
+  endDate: OrderDirection
+  isActive: OrderDirection
 }
 
 enum OrderDirection {
@@ -132,40 +163,219 @@ enum OrderDirection {
   desc
 }
 
-input UserUpdateInput {
+input AllianceUpdateInput {
+  createdAt: String
   name: String
-  email: String
-  password: String
-  isAdmin: Boolean
-  posts: PostRelateToManyInput
+  description: String
+  endDate: String
+  inChargeUser: UserRelateToOneInput
+  isActive: Boolean
+  logo: ImageFieldInput
+  socialNetworks: AllianceSocialNetworkRelateToOneInput
 }
 
-input UsersUpdateInput {
+input AlliancesUpdateInput {
   id: ID!
-  data: UserUpdateInput
+  data: AllianceUpdateInput
 }
 
-input UserCreateInput {
+input AllianceCreateInput {
+  createdAt: String
   name: String
-  email: String
-  password: String
-  isAdmin: Boolean
-  posts: PostRelateToManyInput
+  description: String
+  endDate: String
+  inChargeUser: UserRelateToOneInput
+  isActive: Boolean
+  logo: ImageFieldInput
+  socialNetworks: AllianceSocialNetworkRelateToOneInput
 }
 
-input UsersCreateInput {
-  data: UserCreateInput
+input AlliancesCreateInput {
+  data: AllianceCreateInput
+}
+
+input SocialNetworkRelateToOneInput {
+  create: SocialNetworkCreateInput
+  connect: SocialNetworkWhereUniqueInput
+  disconnect: SocialNetworkWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+"""
+ Redes sociales de una alianza
+"""
+type AllianceSocialNetwork {
+  id: ID!
+  link: String
+  socialNetwork: SocialNetwork
+}
+
+input AllianceSocialNetworkWhereInput {
+  AND: [AllianceSocialNetworkWhereInput!]
+  OR: [AllianceSocialNetworkWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  link: String
+  link_not: String
+  link_contains: String
+  link_not_contains: String
+  link_starts_with: String
+  link_not_starts_with: String
+  link_ends_with: String
+  link_not_ends_with: String
+  link_i: String
+  link_not_i: String
+  link_contains_i: String
+  link_not_contains_i: String
+  link_starts_with_i: String
+  link_not_starts_with_i: String
+  link_ends_with_i: String
+  link_not_ends_with_i: String
+  link_in: [String]
+  link_not_in: [String]
+  socialNetwork: SocialNetworkWhereInput
+  socialNetwork_is_null: Boolean
+}
+
+input AllianceSocialNetworkWhereUniqueInput {
+  id: ID!
+}
+
+enum SortAllianceSocialNetworksBy {
+  id_ASC
+  id_DESC
+  link_ASC
+  link_DESC
+}
+
+input AllianceSocialNetworkOrderByInput {
+  id: OrderDirection
+  link: OrderDirection
+}
+
+input AllianceSocialNetworkUpdateInput {
+  link: String
+  socialNetwork: SocialNetworkRelateToOneInput
+}
+
+input AllianceSocialNetworksUpdateInput {
+  id: ID!
+  data: AllianceSocialNetworkUpdateInput
+}
+
+input AllianceSocialNetworkCreateInput {
+  link: String
+  socialNetwork: SocialNetworkRelateToOneInput
+}
+
+input AllianceSocialNetworksCreateInput {
+  data: AllianceSocialNetworkCreateInput
+}
+
+"""
+ Red social (instagram, facebook,...)
+"""
+type SocialNetwork {
+  id: ID!
+  logoUrl: String
+  name: String
+}
+
+input SocialNetworkWhereInput {
+  AND: [SocialNetworkWhereInput!]
+  OR: [SocialNetworkWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  logoUrl: String
+  logoUrl_not: String
+  logoUrl_contains: String
+  logoUrl_not_contains: String
+  logoUrl_starts_with: String
+  logoUrl_not_starts_with: String
+  logoUrl_ends_with: String
+  logoUrl_not_ends_with: String
+  logoUrl_i: String
+  logoUrl_not_i: String
+  logoUrl_contains_i: String
+  logoUrl_not_contains_i: String
+  logoUrl_starts_with_i: String
+  logoUrl_not_starts_with_i: String
+  logoUrl_ends_with_i: String
+  logoUrl_not_ends_with_i: String
+  logoUrl_in: [String]
+  logoUrl_not_in: [String]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+}
+
+input SocialNetworkWhereUniqueInput {
+  id: ID!
+}
+
+enum SortSocialNetworksBy {
+  id_ASC
+  id_DESC
+  logoUrl_ASC
+  logoUrl_DESC
+  name_ASC
+  name_DESC
+}
+
+input SocialNetworkOrderByInput {
+  id: OrderDirection
+  logoUrl: OrderDirection
+  name: OrderDirection
+}
+
+input SocialNetworkUpdateInput {
+  logoUrl: String
+  name: String
+}
+
+input SocialNetworksUpdateInput {
+  id: ID!
+  data: SocialNetworkUpdateInput
+}
+
+input SocialNetworkCreateInput {
+  logoUrl: String
+  name: String
+}
+
+input SocialNetworksCreateInput {
+  data: SocialNetworkCreateInput
 }
 
 type Post_content_DocumentField {
   document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input UserRelateToOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: UserWhereUniqueInput
-  disconnectAll: Boolean
 }
 
 input TagRelateToManyInput {
@@ -318,6 +528,13 @@ input PostsCreateInput {
   data: PostCreateInput
 }
 
+input PostRelateToManyInput {
+  create: [PostCreateInput]
+  connect: [PostWhereUniqueInput]
+  disconnect: [PostWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
 """
  A keystone list
 """
@@ -429,6 +646,199 @@ input TagsCreateInput {
   data: TagCreateInput
 }
 
+input AllianceRelateToManyInput {
+  create: [AllianceCreateInput]
+  connect: [AllianceWhereUniqueInput]
+  disconnect: [AllianceWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
+"""
+ A keystone list
+"""
+type User {
+  id: ID!
+  alliances(
+    where: AllianceWhereInput! = {}
+    search: String
+    sortBy: [SortAlliancesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [AllianceOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Alliance!]!
+  _alliancesMeta(
+    where: AllianceWhereInput! = {}
+    search: String
+    sortBy: [SortAlliancesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [AllianceOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use alliancesCount instead."
+    )
+  alliancesCount(where: AllianceWhereInput! = {}): Int
+  email: String
+  isAdmin: Boolean
+  name: String
+  password_is_set: Boolean
+  posts(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Post!]!
+  _postsMeta(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use postsCount instead."
+    )
+  postsCount(where: PostWhereInput! = {}): Int
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID]
+  id_not_in: [ID]
+
+  """
+   condition must be true for all nodes
+  """
+  alliances_every: AllianceWhereInput
+
+  """
+   condition must be true for at least 1 node
+  """
+  alliances_some: AllianceWhereInput
+
+  """
+   condition must be false for all nodes
+  """
+  alliances_none: AllianceWhereInput
+  email: String
+  email_not: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  email_i: String
+  email_not_i: String
+  email_contains_i: String
+  email_not_contains_i: String
+  email_starts_with_i: String
+  email_not_starts_with_i: String
+  email_ends_with_i: String
+  email_not_ends_with_i: String
+  email_in: [String]
+  email_not_in: [String]
+  isAdmin: Boolean
+  isAdmin_not: Boolean
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  password_is_set: Boolean
+
+  """
+   condition must be true for all nodes
+  """
+  posts_every: PostWhereInput
+
+  """
+   condition must be true for at least 1 node
+  """
+  posts_some: PostWhereInput
+
+  """
+   condition must be false for all nodes
+  """
+  posts_none: PostWhereInput
+}
+
+input UserWhereUniqueInput {
+  id: ID!
+}
+
+enum SortUsersBy {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  isAdmin_ASC
+  isAdmin_DESC
+  name_ASC
+  name_DESC
+}
+
+input UserOrderByInput {
+  id: OrderDirection
+  email: OrderDirection
+  isAdmin: OrderDirection
+  name: OrderDirection
+}
+
+input UserUpdateInput {
+  alliances: AllianceRelateToManyInput
+  email: String
+  isAdmin: Boolean
+  name: String
+  password: String
+  posts: PostRelateToManyInput
+}
+
+input UsersUpdateInput {
+  id: ID!
+  data: UserUpdateInput
+}
+
+input UserCreateInput {
+  alliances: AllianceRelateToManyInput
+  email: String
+  isAdmin: Boolean
+  name: String
+  password: String
+  posts: PostRelateToManyInput
+}
+
+input UsersCreateInput {
+  data: UserCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -443,34 +853,103 @@ type _QueryMeta {
 
 type Mutation {
   """
-   Create a single User item.
+   Create a single Alliance item.
   """
-  createUser(data: UserCreateInput): User
+  createAlliance(data: AllianceCreateInput): Alliance
 
   """
-   Create multiple User items.
+   Create multiple Alliance items.
   """
-  createUsers(data: [UsersCreateInput]): [User]
+  createAlliances(data: [AlliancesCreateInput]): [Alliance]
 
   """
-   Update a single User item by ID.
+   Update a single Alliance item by ID.
   """
-  updateUser(id: ID!, data: UserUpdateInput): User
+  updateAlliance(id: ID!, data: AllianceUpdateInput): Alliance
 
   """
-   Update multiple User items by ID.
+   Update multiple Alliance items by ID.
   """
-  updateUsers(data: [UsersUpdateInput]): [User]
+  updateAlliances(data: [AlliancesUpdateInput]): [Alliance]
 
   """
-   Delete a single User item by ID.
+   Delete a single Alliance item by ID.
   """
-  deleteUser(id: ID!): User
+  deleteAlliance(id: ID!): Alliance
 
   """
-   Delete multiple User items by ID.
+   Delete multiple Alliance items by ID.
   """
-  deleteUsers(ids: [ID!]): [User]
+  deleteAlliances(ids: [ID!]): [Alliance]
+
+  """
+   Create a single AllianceSocialNetwork item.
+  """
+  createAllianceSocialNetwork(
+    data: AllianceSocialNetworkCreateInput
+  ): AllianceSocialNetwork
+
+  """
+   Create multiple AllianceSocialNetwork items.
+  """
+  createAllianceSocialNetworks(
+    data: [AllianceSocialNetworksCreateInput]
+  ): [AllianceSocialNetwork]
+
+  """
+   Update a single AllianceSocialNetwork item by ID.
+  """
+  updateAllianceSocialNetwork(
+    id: ID!
+    data: AllianceSocialNetworkUpdateInput
+  ): AllianceSocialNetwork
+
+  """
+   Update multiple AllianceSocialNetwork items by ID.
+  """
+  updateAllianceSocialNetworks(
+    data: [AllianceSocialNetworksUpdateInput]
+  ): [AllianceSocialNetwork]
+
+  """
+   Delete a single AllianceSocialNetwork item by ID.
+  """
+  deleteAllianceSocialNetwork(id: ID!): AllianceSocialNetwork
+
+  """
+   Delete multiple AllianceSocialNetwork items by ID.
+  """
+  deleteAllianceSocialNetworks(ids: [ID!]): [AllianceSocialNetwork]
+
+  """
+   Create a single SocialNetwork item.
+  """
+  createSocialNetwork(data: SocialNetworkCreateInput): SocialNetwork
+
+  """
+   Create multiple SocialNetwork items.
+  """
+  createSocialNetworks(data: [SocialNetworksCreateInput]): [SocialNetwork]
+
+  """
+   Update a single SocialNetwork item by ID.
+  """
+  updateSocialNetwork(id: ID!, data: SocialNetworkUpdateInput): SocialNetwork
+
+  """
+   Update multiple SocialNetwork items by ID.
+  """
+  updateSocialNetworks(data: [SocialNetworksUpdateInput]): [SocialNetwork]
+
+  """
+   Delete a single SocialNetwork item by ID.
+  """
+  deleteSocialNetwork(id: ID!): SocialNetwork
+
+  """
+   Delete multiple SocialNetwork items by ID.
+  """
+  deleteSocialNetworks(ids: [ID!]): [SocialNetwork]
 
   """
    Create a single Post item.
@@ -531,6 +1010,36 @@ type Mutation {
    Delete multiple Tag items by ID.
   """
   deleteTags(ids: [ID!]): [Tag]
+
+  """
+   Create a single User item.
+  """
+  createUser(data: UserCreateInput): User
+
+  """
+   Create multiple User items.
+  """
+  createUsers(data: [UsersCreateInput]): [User]
+
+  """
+   Update a single User item by ID.
+  """
+  updateUser(id: ID!, data: UserUpdateInput): User
+
+  """
+   Update multiple User items by ID.
+  """
+  updateUsers(data: [UsersUpdateInput]): [User]
+
+  """
+   Delete a single User item by ID.
+  """
+  deleteUser(id: ID!): User
+
+  """
+   Delete multiple User items by ID.
+  """
+  deleteUsers(ids: [ID!]): [User]
   authenticateUserWithPassword(
     email: String!
     password: String!
@@ -571,47 +1080,119 @@ enum PasswordAuthErrorCode {
 }
 
 input CreateInitialUserInput {
-  name: String
   email: String
-  password: String
   isAdmin: Boolean
+  name: String
+  password: String
 }
 
 type Query {
   """
-   Search for all User items which match the where clause.
+   Search for all Alliance items which match the where clause.
   """
-  allUsers(
-    where: UserWhereInput! = {}
+  allAlliances(
+    where: AllianceWhereInput! = {}
     search: String
-    sortBy: [SortUsersBy!]
+    sortBy: [SortAlliancesBy!]
       @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [UserOrderByInput!]! = []
+    orderBy: [AllianceOrderByInput!]! = []
     first: Int
     skip: Int! = 0
-  ): [User!]
+  ): [Alliance!]
 
   """
-   Search for the User item with the matching ID.
+   Search for the Alliance item with the matching ID.
   """
-  User(where: UserWhereUniqueInput!): User
+  Alliance(where: AllianceWhereUniqueInput!): Alliance
 
   """
-   Perform a meta-query on all User items which match the where clause.
+   Perform a meta-query on all Alliance items which match the where clause.
   """
-  _allUsersMeta(
-    where: UserWhereInput! = {}
+  _allAlliancesMeta(
+    where: AllianceWhereInput! = {}
     search: String
-    sortBy: [SortUsersBy!]
+    sortBy: [SortAlliancesBy!]
       @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [UserOrderByInput!]! = []
+    orderBy: [AllianceOrderByInput!]! = []
     first: Int
     skip: Int! = 0
   ): _QueryMeta
     @deprecated(
-      reason: "This query will be removed in a future version. Please use usersCount instead."
+      reason: "This query will be removed in a future version. Please use alliancesCount instead."
     )
-  usersCount(where: UserWhereInput! = {}): Int
+  alliancesCount(where: AllianceWhereInput! = {}): Int
+
+  """
+   Search for all AllianceSocialNetwork items which match the where clause.
+  """
+  allAllianceSocialNetworks(
+    where: AllianceSocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortAllianceSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [AllianceSocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [AllianceSocialNetwork!]
+
+  """
+   Search for the AllianceSocialNetwork item with the matching ID.
+  """
+  AllianceSocialNetwork(
+    where: AllianceSocialNetworkWhereUniqueInput!
+  ): AllianceSocialNetwork
+
+  """
+   Perform a meta-query on all AllianceSocialNetwork items which match the where clause.
+  """
+  _allAllianceSocialNetworksMeta(
+    where: AllianceSocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortAllianceSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [AllianceSocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use allianceSocialNetworksCount instead."
+    )
+  allianceSocialNetworksCount(where: AllianceSocialNetworkWhereInput! = {}): Int
+
+  """
+   Search for all SocialNetwork items which match the where clause.
+  """
+  allSocialNetworks(
+    where: SocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [SocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [SocialNetwork!]
+
+  """
+   Search for the SocialNetwork item with the matching ID.
+  """
+  SocialNetwork(where: SocialNetworkWhereUniqueInput!): SocialNetwork
+
+  """
+   Perform a meta-query on all SocialNetwork items which match the where clause.
+  """
+  _allSocialNetworksMeta(
+    where: SocialNetworkWhereInput! = {}
+    search: String
+    sortBy: [SortSocialNetworksBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [SocialNetworkOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use socialNetworksCount instead."
+    )
+  socialNetworksCount(where: SocialNetworkWhereInput! = {}): Int
 
   """
    Search for all Post items which match the where clause.
@@ -682,6 +1263,41 @@ type Query {
       reason: "This query will be removed in a future version. Please use tagsCount instead."
     )
   tagsCount(where: TagWhereInput! = {}): Int
+
+  """
+   Search for all User items which match the where clause.
+  """
+  allUsers(
+    where: UserWhereInput! = {}
+    search: String
+    sortBy: [SortUsersBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [UserOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [User!]
+
+  """
+   Search for the User item with the matching ID.
+  """
+  User(where: UserWhereUniqueInput!): User
+
+  """
+   Perform a meta-query on all User items which match the where clause.
+  """
+  _allUsersMeta(
+    where: UserWhereInput! = {}
+    search: String
+    sortBy: [SortUsersBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [UserOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use usersCount instead."
+    )
+  usersCount(where: UserWhereInput! = {}): Int
   authenticatedItem: AuthenticatedItem
   keystone: KeystoneMeta!
 }

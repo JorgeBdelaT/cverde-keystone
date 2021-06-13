@@ -8,13 +8,43 @@ generator client {
   output   = "node_modules/.prisma/client"
 }
 
-model User {
-  id       Int      @id @default(autoincrement())
-  name     String?
-  email    String?  @unique
-  password String?
-  isAdmin  Boolean?
-  posts    Post[]   @relation("Postauthor")
+model Alliance {
+  id               Int                    @id @default(autoincrement())
+  createdAt        DateTime?
+  name             String?
+  description      String?
+  endDate          DateTime?
+  isActive         Boolean?
+  logo_filesize    Int?
+  logo_extension   String?
+  logo_width       Int?
+  logo_height      Int?
+  logo_mode        String?
+  logo_id          String?
+  inChargeUser     User?                  @relation("AllianceinChargeUser", fields: [inChargeUserId], references: [id])
+  inChargeUserId   Int?                   @map("inChargeUser")
+  socialNetworks   AllianceSocialNetwork? @relation("AlliancesocialNetworks", fields: [socialNetworksId], references: [id])
+  socialNetworksId Int?                   @map("socialNetworks")
+
+  @@index([inChargeUserId])
+  @@index([socialNetworksId])
+}
+
+model AllianceSocialNetwork {
+  id                           Int            @id @default(autoincrement())
+  link                         String?
+  socialNetwork                SocialNetwork? @relation("AllianceSocialNetworksocialNetwork", fields: [socialNetworkId], references: [id])
+  socialNetworkId              Int?           @map("socialNetwork")
+  from_Alliance_socialNetworks Alliance[]     @relation("AlliancesocialNetworks")
+
+  @@index([socialNetworkId])
+}
+
+model SocialNetwork {
+  id                                       Int                     @id @default(autoincrement())
+  logoUrl                                  String?
+  name                                     String?
+  from_AllianceSocialNetwork_socialNetwork AllianceSocialNetwork[] @relation("AllianceSocialNetworksocialNetwork")
 }
 
 model Post {
@@ -34,4 +64,14 @@ model Tag {
   id    Int     @id @default(autoincrement())
   name  String?
   posts Post[]  @relation("Post_tags_Tag_posts", references: [id])
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String?    @unique
+  isAdmin   Boolean?
+  name      String?
+  password  String?
+  alliances Alliance[] @relation("AllianceinChargeUser")
+  posts     Post[]     @relation("Postauthor")
 }

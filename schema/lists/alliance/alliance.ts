@@ -10,7 +10,13 @@ import {
 export const Alliance = list({
   ui: {
     listView: {
-      initialColumns: ["name", "inChargeUser", "createdAt", "isActive"],
+      initialColumns: [
+        "name",
+        "inChargeUser",
+        "socialNetworks",
+        "createdAt",
+        "isActive",
+      ],
     },
   },
   fields: {
@@ -24,6 +30,8 @@ export const Alliance = list({
     inChargeUser: relationship({ ref: "User.alliances" }),
     isActive: checkbox({ defaultValue: false, isRequired: true }),
     logo: image(),
-    // socialNetworks: relationship({ ref: "SocialNetwork.alliances", many: true }),
+    socialNetworks: relationship({
+      ref: "AllianceSocialNetwork",
+    }),
   },
 });
