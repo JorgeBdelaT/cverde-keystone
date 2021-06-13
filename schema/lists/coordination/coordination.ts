@@ -1,14 +1,24 @@
 import { list } from "@keystone-next/keystone/schema";
 import { text, relationship, timestamp } from "@keystone-next/fields";
+import { hiddenField } from "../../../utils/ui";
 
 export const Coordination = list({
   ui: {
-    listView: { initialColumns: ["name", "description"] },
+    listView: {
+      initialColumns: [
+        "name",
+        "organizationName",
+        "description",
+        "socialNetworks",
+        "createdAt",
+      ],
+    },
   },
   fields: {
     createdAt: timestamp({
       isRequired: true,
       defaultValue: new Date().toISOString(),
+      ui: { ...hiddenField },
     }),
     description: text({ isRequired: true }),
     logoUrl: text(),
@@ -21,6 +31,25 @@ export const Coordination = list({
     socialNetworks: relationship({
       ref: "CoordinationSocialNetwork",
       many: true,
+      ui: {
+        createView: { fieldMode: "hidden" },
+      },
     }),
+  },
+  hooks: {
+    afterChange: async ({ operation, updatedItem, context: { db } }) => {
+      if (operation === "create") {
+        const socialNetworks = await db.lists.SocialNetwork.findMany();
+        await db.lists.CoordinationSocialNetwork.createMany({
+          data: socialNetworks.map((socialNetwork) => ({
+            data: {
+              coordination: { connect: { id: updatedItem.id } },
+              socialNetwork: { connect: { id: socialNetwork.id } },
+              name: socialNetwork.name,
+            },
+          })),
+        });
+      }
+    },
   },
 });

@@ -25,8 +25,6 @@ export const AllianceSocialNetwork = list({
     },
   },
   access: {
-    create: ({ context }) => {
-      return isAdmin(context);
-    },
+    create: ({ context }) => isAdmin(context),
   },
 });

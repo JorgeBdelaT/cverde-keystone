@@ -52,24 +52,29 @@ model SocialNetwork {
 }
 
 model Coordination {
-  id               Int                         @id @default(autoincrement())
-  createdAt        DateTime?
-  description      String?
-  logoUrl          String?
-  name             String?
-  organizationName String?
-  members          CoordinationUserPosition[]  @relation("CoordinationUserPositioncoordination")
-  socialNetworks   CoordinationSocialNetwork[] @relation("Coordination_socialNetworks_many", references: [id])
+  id                                          Int                         @id @default(autoincrement())
+  createdAt                                   DateTime?
+  description                                 String?
+  logoUrl                                     String?
+  name                                        String?
+  organizationName                            String?
+  members                                     CoordinationUserPosition[]  @relation("CoordinationUserPositioncoordination")
+  socialNetworks                              CoordinationSocialNetwork[] @relation("Coordination_socialNetworks_many", references: [id])
+  from_CoordinationSocialNetwork_coordination CoordinationSocialNetwork[] @relation("CoordinationSocialNetworkcoordination")
 }
 
 model CoordinationSocialNetwork {
   id                               Int            @id @default(autoincrement())
   link                             String?
+  name                             String?
   socialNetwork                    SocialNetwork? @relation("CoordinationSocialNetworksocialNetwork", fields: [socialNetworkId], references: [id])
   socialNetworkId                  Int?           @map("socialNetwork")
+  coordination                     Coordination?  @relation("CoordinationSocialNetworkcoordination", fields: [coordinationId], references: [id])
+  coordinationId                   Int?           @map("coordination")
   from_Coordination_socialNetworks Coordination[] @relation("Coordination_socialNetworks_many", references: [id])
 
   @@index([socialNetworkId])
+  @@index([coordinationId])
 }
 
 model CoordinationUserPosition {
