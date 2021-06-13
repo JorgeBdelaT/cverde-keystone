@@ -5,6 +5,7 @@ import { createAuth } from "@keystone-next/auth";
 
 import { lists } from "./schema";
 import { isAdmin } from "./utils/auth";
+import { runSeeds } from "./seeds";
 
 loadEnvs();
 const sessionSecret = process.env.SESSION_SECRET;
@@ -50,18 +51,10 @@ export default withAuth(
       adapter: "prisma_postgresql",
       url: databaseUrl,
       // useMigrations: true,
+      onConnect: ({ db }) => runSeeds(db),
     },
     ui: {
-      isAccessAllowed: async ({ db, session }) => {
-        if (session?.itemId) {
-          const user = await db.lists.User.findOne({
-            where: { id: session.itemId },
-          });
-
-          return isAdmin(user);
-        }
-        return false;
-      },
+      isAccessAllowed: (context) => isAdmin(context),
     },
     lists,
     session,
