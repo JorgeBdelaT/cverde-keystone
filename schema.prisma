@@ -80,6 +80,7 @@ model CoordinationSocialNetwork {
 model CoordinationUserPosition {
   id             Int           @id @default(autoincrement())
   createdAt      DateTime?
+  name           String?
   endDate        DateTime?
   startDate      DateTime?
   coordination   Coordination? @relation("CoordinationUserPositioncoordination", fields: [coordinationId], references: [id])

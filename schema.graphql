@@ -815,11 +815,12 @@ input PositionRelateToOneInput {
 }
 
 """
- A keystone list
+ Miembro de una coordinacion
 """
 type CoordinationUserPosition {
   id: ID!
   createdAt: String
+  name: String
   endDate: String
   startDate: String
   coordination: Coordination
@@ -846,6 +847,24 @@ input CoordinationUserPositionWhereInput {
   createdAt_gte: String
   createdAt_in: [String]
   createdAt_not_in: [String]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
   endDate: String
   endDate_not: String
   endDate_lt: String
@@ -879,6 +898,8 @@ enum SortCoordinationUserPositionsBy {
   id_DESC
   createdAt_ASC
   createdAt_DESC
+  name_ASC
+  name_DESC
   endDate_ASC
   endDate_DESC
   startDate_ASC
@@ -888,12 +909,14 @@ enum SortCoordinationUserPositionsBy {
 input CoordinationUserPositionOrderByInput {
   id: OrderDirection
   createdAt: OrderDirection
+  name: OrderDirection
   endDate: OrderDirection
   startDate: OrderDirection
 }
 
 input CoordinationUserPositionUpdateInput {
   createdAt: String
+  name: String
   endDate: String
   startDate: String
   coordination: CoordinationRelateToOneInput
@@ -908,6 +931,7 @@ input CoordinationUserPositionsUpdateInput {
 
 input CoordinationUserPositionCreateInput {
   createdAt: String
+  name: String
   endDate: String
   startDate: String
   coordination: CoordinationRelateToOneInput
