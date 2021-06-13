@@ -1,6 +1,7 @@
 import { list } from "@keystone-next/keystone/schema";
 import { text, relationship, timestamp } from "@keystone-next/fields";
 import { hiddenField } from "../../../utils/ui";
+import { isAdmin } from "../../../utils/auth";
 
 export const Coordination = list({
   ui: {
@@ -25,6 +26,7 @@ export const Coordination = list({
     members: relationship({
       ref: "CoordinationUserPosition.coordination",
       many: true,
+      ui: { createView: { fieldMode: "hidden" } },
     }),
     name: text({ isRequired: true }),
     organizationName: text({ isRequired: true }),
@@ -35,6 +37,11 @@ export const Coordination = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+  },
+  access: {
+    create: ({ context }) => isAdmin(context),
+    delete: ({ context }) => isAdmin(context),
+    update: ({ context }) => isAdmin(context),
   },
   hooks: {
     afterChange: async ({ operation, updatedItem, context: { db } }) => {
