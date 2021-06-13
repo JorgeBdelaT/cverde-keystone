@@ -8,6 +8,7 @@ export const User = list({
     },
   },
   fields: {
+    alliances: relationship({ ref: "Alliance.inChargeUser", many: true }),
     email: text({ isRequired: true, isUnique: true }),
     isAdmin: checkbox({ defaultValue: false, isRequired: true }),
     name: text({ isRequired: true }),
