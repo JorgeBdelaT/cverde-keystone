@@ -1,1 +1,3 @@
-export { Tag } from "./tag";
+import { Tag } from "./tag";
+
+export default { Tag };

@@ -1,14 +1,15 @@
-import { Alliance, AllianceSocialNetwork } from "./alliance";
-import { SocialNetwork } from "./common";
-import { Post } from "./post";
-import { Tag } from "./tag";
-import { User } from "./user";
+import AllianceLists from "./alliance";
+import CommonLists from "./common";
+import CoordinationLists from "./coordination";
+import PostLists from "./post";
+import TagLists from "./tag";
+import UserLists from "./user";
 
 export default {
-  Alliance,
-  AllianceSocialNetwork,
-  SocialNetwork,
-  Post,
-  Tag,
-  User,
+  ...AllianceLists,
+  ...CommonLists,
+  ...CoordinationLists,
+  ...PostLists,
+  ...TagLists,
+  ...UserLists,
 };

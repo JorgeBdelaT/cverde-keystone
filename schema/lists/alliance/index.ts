@@ -1,2 +1,4 @@
-export { Alliance } from "./alliance";
-export { AllianceSocialNetwork } from "./allianceSocialNetwork";
+import { Alliance } from "./alliance";
+import { AllianceSocialNetwork } from "./allianceSocialNetwork";
+
+export default { Alliance, AllianceSocialNetwork };

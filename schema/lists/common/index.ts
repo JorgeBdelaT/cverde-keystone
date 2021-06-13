@@ -1,1 +1,3 @@
-export { SocialNetwork } from "./socialNetwork";
+import { SocialNetwork } from "./socialNetwork";
+
+export default { SocialNetwork };

@@ -1,5 +1,5 @@
 import { list } from "@keystone-next/keystone/schema";
-import { text, relationship, checkbox, timestamp } from "@keystone-next/fields";
+import { text, relationship } from "@keystone-next/fields";
 
 export const AllianceSocialNetwork = list({
   ui: { isHidden: true },
