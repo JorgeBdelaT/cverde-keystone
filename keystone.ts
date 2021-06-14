@@ -27,9 +27,11 @@ const { withAuth } = createAuth({
   listKey: "User",
   identityField: "email",
   secretField: "password",
-  sessionData: "name",
+  sessionData: "id name email isAdmin",
   initFirstItem: {
-    fields: ["name", "email", "password", "isAdmin"],
+    fields: ["name", "email", "password"],
+    itemData: { isAdmin: true },
+    skipKeystoneWelcome: true,
   },
 });
 
@@ -54,7 +56,7 @@ export default withAuth(
       onConnect: ({ db }) => runSeeds(db),
     },
     ui: {
-      isAccessAllowed: (context) => isLoggedIn(context),
+      isAccessAllowed: ({ session }) => isLoggedIn(session),
     },
     lists,
     session,

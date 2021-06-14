@@ -16,13 +16,18 @@ export const User = list({
       defaultValue: false,
       isRequired: true,
       access: {
-        create: ({ context }) => isAdmin(context),
-        update: ({ context }) => isAdmin(context),
-        read: ({ context }) => isLoggedIn(context),
+        create: ({ session }) => isAdmin(session),
+        update: ({ session }) => isAdmin(session),
+        read: ({ session }) => isLoggedIn(session),
       },
     }),
     name: text({ isRequired: true }),
     password: password({ isRequired: true }),
     posts: relationship({ ref: "Post.author", many: true }),
+  },
+  access: {
+    delete: ({ session }) => isAdmin(session),
+    create: ({ session }) => isAdmin(session),
+    update: ({ session }) => isAdmin(session),
   },
 });

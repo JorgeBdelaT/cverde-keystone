@@ -39,9 +39,9 @@ export const Coordination = list({
     }),
   },
   access: {
-    create: ({ context }) => isAdmin(context),
-    delete: ({ context }) => isAdmin(context),
-    update: ({ context }) => isAdmin(context),
+    create: ({ session }) => isAdmin(session),
+    delete: ({ session }) => isAdmin(session),
+    update: ({ session }) => isAdmin(session),
   },
   hooks: {
     afterChange: async ({ operation, updatedItem, context: { db } }) => {

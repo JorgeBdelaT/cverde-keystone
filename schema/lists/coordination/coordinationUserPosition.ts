@@ -1,6 +1,7 @@
 import { list } from "@keystone-next/keystone/schema";
 import { relationship, timestamp, text } from "@keystone-next/fields";
 import { hiddenField } from "../../../utils/ui";
+import { isAdmin } from "../../../utils/auth";
 
 export const CoordinationUserPosition = list({
   ui: {
@@ -35,5 +36,10 @@ export const CoordinationUserPosition = list({
       }
       return resolvedData;
     },
+  },
+  access: {
+    delete: ({ session }) => isAdmin(session),
+    create: ({ session }) => isAdmin(session),
+    update: ({ session }) => isAdmin(session),
   },
 });

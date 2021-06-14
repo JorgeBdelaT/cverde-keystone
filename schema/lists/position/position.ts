@@ -17,6 +17,8 @@ export const Position = list({
     name: text({ isRequired: true }),
   },
   access: {
-    create: ({ context }) => isAdmin(context),
+    delete: ({ session }) => isAdmin(session),
+    create: ({ session }) => isAdmin(session),
+    update: ({ session }) => isAdmin(session),
   },
 });

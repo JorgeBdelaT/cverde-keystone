@@ -7,6 +7,7 @@ import {
   image,
 } from "@keystone-next/fields";
 import { hiddenField } from "../../../utils/ui";
+import { isAdmin } from "../../../utils/auth";
 
 export const Alliance = list({
   ui: {
@@ -55,5 +56,10 @@ export const Alliance = list({
         });
       }
     },
+  },
+  access: {
+    delete: ({ session }) => isAdmin(session),
+    create: ({ session }) => isAdmin(session),
+    update: ({ session }) => isAdmin(session),
   },
 });

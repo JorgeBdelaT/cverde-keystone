@@ -1,25 +1,14 @@
 import { KeystoneContext, MaybePromise } from "@keystone-next/types";
+import { SessionDataType } from "../types";
 
-export const isAdmin: (context: KeystoneContext) => MaybePromise<boolean> =
-  async (context) => {
-    const { db, session } = context;
-    if (session?.itemId) {
-      const user = await db.lists.User.findOne({
-        where: { id: session.itemId },
-      });
+export const isAdmin: (session: SessionDataType) => MaybePromise<boolean> = (
+  session
+) => {
+  return !!session?.data.isAdmin;
+};
 
-      return !!user?.isAdmin;
-    }
-  };
-
-export const isLoggedIn: (context: KeystoneContext) => MaybePromise<boolean> =
-  async (context) => {
-    const { db, session } = context;
-    if (session?.itemId) {
-      const user = await db.lists.User.findOne({
-        where: { id: session.itemId },
-      });
-
-      return !!user;
-    }
-  };
+export const isLoggedIn: (session: SessionDataType) => MaybePromise<boolean> = (
+  session
+) => {
+  return !!session?.data;
+};

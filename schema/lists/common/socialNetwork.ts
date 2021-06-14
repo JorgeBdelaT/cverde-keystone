@@ -14,10 +14,10 @@ export const SocialNetwork = list({
   },
   description: "Red social (instagram, facebook,...)",
   access: {
-    create: ({ context }) => isAdmin(context),
-    read: ({ context }) => isLoggedIn(context),
-    update: ({ context }) => isAdmin(context),
-    delete: ({ context }) => isAdmin(context),
+    create: ({ session }) => isAdmin(session),
+    read: ({ session }) => isLoggedIn(session),
+    update: ({ session }) => isAdmin(session),
+    delete: ({ session }) => isAdmin(session),
   },
   hooks: {
     afterChange: async ({ operation, updatedItem, context: { db } }) => {
